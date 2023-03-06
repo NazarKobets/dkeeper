@@ -7,7 +7,7 @@ actor DKeeper {
     content: Text;
   };
 
-  var notes: List.List<Note> = List.nil<Note>();
+  stable var notes: List.List<Note> = List.nil<Note>();
 
   public func createNote(titleText: Text, contentText: Text) {
     let newNote: Note = {
@@ -21,5 +21,11 @@ actor DKeeper {
 
   public query func readNotes(): async [Note] {
     return List.toArray(notes);
+  };
+
+  public func removeNote(id: Nat) {
+    let takeNote = List.take(notes, id);
+    let dropNote = List.drop(notes, id + 1);
+    notes := List.append(takeNote, dropNote);
   };
 }
